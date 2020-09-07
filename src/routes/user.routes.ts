@@ -1,10 +1,11 @@
 import { Router } from 'express';
-import { getCustomRepository } from 'typeorm';
+import { getCustomRepository, getRepository } from 'typeorm';
 
 import UserRepository from '../repositories/UserRepository';
 import CreateUserService from '../services/CreateUserService';
 import DeleteUserService from '../services/DeleteUserService';
 import UpdateUserService from '../services/UpdateUserService';
+import UserModel from '../models/UserModel';
 
 const userRouter = Router();
 
@@ -38,26 +39,19 @@ userRouter.post('/', async (req, res) => {
 
 userRouter.put('/update/:id', async (req, res) => {
   const { id } = req.params;
-  const { name, string, age } = req.body;
-  const userRepository = getCustomRepository(UserRepository);
+  const { name, email, age } = req.body;
+  const userRepository = await getRepository(UserModel);
   const updateUserService = new UpdateUserService();
 
-  const newUser = {
+
+  const newUser = await updateUserService.execute(id, {
     name,
-    string,
-    age,
-    id
-  }
-
-  const user = await userRepository.findOne({
-    where: {
-      id
-    }
+    email,
+    age
   })
+  console.log(newUser);
 
-  updateUserService.execute(user, newUser);
-
-  return res.json(user);
+  return res.json(newUser);
 
 })
 

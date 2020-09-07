@@ -1,32 +1,30 @@
-import { getCustomRepository } from 'typeorm';
+import { getRepository, UpdateResult } from 'typeorm';
 
 import UserModel from '../models/UserModel';
-import UserRepository from '../repositories/UserRepository';
 
 interface UserDataDTO {
-  name?: string;
-  email?: string;
-  age?: number;
+  name: string;
+  email: string;
+  age: number;
 }
 
 class UpdateUserService {
-  public async execute(id: UserModel, { name, email, age }: UserDataDTO): Promise<UserModel> {
+  public async execute(id_user: string, { name, email, age }: UserDataDTO): Promise<UserModel | undefined> {
 
-    const userRepository = getCustomRepository(UserRepository);
+    const userRepository = getRepository(UserModel);
 
     const newUser = {
       name,
       email,
       age
     }
-    console.log(id);
-
-    await userRepository.merge(id, newUser);
 
 
-    await userRepository.save(id);
-    console.log(id);
-    return id;
+    await userRepository.update(id_user, newUser);
+
+    const oldUser = await userRepository.findOne(id_user);
+
+    return oldUser
   }
 }
 
