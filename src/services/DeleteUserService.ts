@@ -1,18 +1,12 @@
 import { getCustomRepository, DeleteResult } from 'typeorm';
 
-import UserModel from '../models/UserModel';
 import UserRepository from '../repositories/UserRepository';
+import UserModel from '../models/UserModel';
 
 
 class DeleteUserService {
-  public async execute(id: string): Promise<DeleteResult> {
+  public async execute(id: string | UserModel): Promise<DeleteResult> {
     const userRepository = getCustomRepository(UserRepository);
-
-    const idUser = userRepository.findOne({
-      where: {
-        id
-      }
-    })
 
     const user = await userRepository.delete(id);
 

@@ -4,6 +4,7 @@ import { getCustomRepository } from 'typeorm';
 import UserRepository from '../repositories/UserRepository';
 import CreateUserService from '../services/CreateUserService';
 import DeleteUserService from '../services/DeleteUserService';
+import UpdateUserService from '../services/UpdateUserService';
 
 const userRouter = Router();
 
@@ -35,6 +36,31 @@ userRouter.post('/', async (req, res) => {
   }
 })
 
+userRouter.put('/update/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, string, age } = req.body;
+  const userRepository = getCustomRepository(UserRepository);
+  const updateUserService = new UpdateUserService();
+
+  const newUser = {
+    name,
+    string,
+    age,
+    id
+  }
+
+  const user = await userRepository.findOne({
+    where: {
+      id
+    }
+  })
+
+  updateUserService.execute(user, newUser);
+
+  return res.json(user);
+
+})
+
 userRouter.delete('/delete/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -52,10 +78,9 @@ userRouter.delete('/delete/:id', async (req, res) => {
 
   const deleteService = new DeleteUserService();
 
-  const userDelete = deleteService.execute(id);
+  const userDelete = deleteService.execute(idUser);
 
   return res.json(userDelete);
-
 })
 
 export default userRouter;
