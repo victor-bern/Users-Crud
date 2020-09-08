@@ -10,7 +10,7 @@ import UserModel from '../models/UserModel';
 const userRouter = Router();
 
 userRouter.get('/', async (req, res) => {
-  const userRepository = getCustomRepository(UserRepository);
+  const userRepository = await getRepository(UserModel);
 
   const users = await userRepository.find();
 
@@ -40,9 +40,8 @@ userRouter.post('/', async (req, res) => {
 userRouter.put('/update/:id', async (req, res) => {
   const { id } = req.params;
   const { name, email, age } = req.body;
-  const userRepository = await getRepository(UserModel);
-  const updateUserService = new UpdateUserService();
 
+  const updateUserService = new UpdateUserService();
 
   const newUser = await updateUserService.execute(id, {
     name,
@@ -58,7 +57,7 @@ userRouter.put('/update/:id', async (req, res) => {
 userRouter.delete('/delete/:id', async (req, res) => {
   const { id } = req.params;
 
-  const userRepository = getCustomRepository(UserRepository);
+  const userRepository = await getRepository(UserModel);
 
   const idUser = await userRepository.findOne({
     where: {

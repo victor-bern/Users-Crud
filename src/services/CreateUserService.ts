@@ -1,7 +1,6 @@
-import { getCustomRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 
 import UserModel from '../models/UserModel';
-import UserRepository from '../repositories/UserRepository';
 
 interface UserDataDTO {
   name: string;
@@ -11,7 +10,7 @@ interface UserDataDTO {
 
 class CreateUserService {
   public async execute({ name, email, age }: UserDataDTO): Promise<UserModel> {
-    const userRepository = getCustomRepository(UserRepository);
+    const userRepository = await getRepository(UserModel);
 
 
     const user = userRepository.create({
