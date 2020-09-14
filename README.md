@@ -1,7 +1,7 @@
 # Users-Crud
 
 ## In this project i started a new knowledge using:
--  [TypeScript](https://www.typescriptlang.org/).
-- TypeORM
-- Express
-- PostgresSql
+-  [Typescript](https://www.typescriptlang.org/)
+- [TypeORM](https://typeorm.io/)
+- [Express](https://expressjs.com/)
+- [PostgresSQL](https://www.postgresql.org/)
